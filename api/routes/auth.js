@@ -48,6 +48,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
+//get all users
 router.get('/', verify, async (req, res) => {
   try {
     const user = await Users.find({});
