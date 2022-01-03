@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function Home() {
   const {isFetching, user, dispatch} = useContext(AuthContext);
-  const [d, setD] = useState('');
+  const [d, setD] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -15,7 +15,7 @@ function Home() {
               'Bearer ' + JSON.parse(localStorage.getItem('user')).accessToken,
           },
         });
-        console.log(res.data);
+        setD(res.data);
       } catch (err) {
         console.log(err);
       }
@@ -24,8 +24,11 @@ function Home() {
   }, []);
   return (
     <div>
-      <span>user token is:{localStorage.getItem('user').accessToken}</span>
+      <span>user token is:{user.token}</span>
       <h5>Good luck in converting to react native.. goodnight!</h5>
+      {/* {d.map((u, index) => {
+        return <span key={index}>{u.userName}</span>;
+      })} */}
     </div>
   );
 }
