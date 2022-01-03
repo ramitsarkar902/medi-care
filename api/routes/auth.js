@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const User = require('../models/Users');
+const Users = require('../models/Users');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const verify = require('../verifyToken');
@@ -10,7 +10,7 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPw = await bcrypt.hash(req.body.pw, salt);
     //create user
-    const newUser = new User({
+    const newUser = new Users({
       userName: req.body.userName,
       pw: hashedPw,
     });
@@ -23,7 +23,7 @@ router.post('/register', async (req, res) => {
 //login
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({userName: req.body.userName});
+    const user = await Users.findOne({userName: req.body.userName});
     if (!user) {
       res.status(404).json('user not found');
       return;
@@ -57,4 +57,12 @@ router.get('/', verify, async (req, res) => {
   }
 });
 
+router.delete('/:id', verify, async (req, res) => {
+  try {
+    await Users.findByIdAndDelete(req.params.id);
+    res.status(200).json('Deleted!');
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 module.exports = router;
